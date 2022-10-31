@@ -32,7 +32,6 @@ import com.google.android.material.textview.MaterialTextView
 import org.y20k.transistor.Keys
 import org.y20k.transistor.R
 import org.y20k.transistor.core.Station
-import org.y20k.transistor.helpers.LogHelper
 import org.y20k.transistor.search.RadioBrowserResult
 import org.y20k.transistor.search.RadioBrowserResultAdapter
 import org.y20k.transistor.search.RadioBrowserSearch
@@ -50,7 +49,7 @@ class FindStationDialog (private var context: Context, private var listener: Fin
     }
 
     /* Define log tag */
-    private val TAG = LogHelper.makeLogTag(FindStationDialog::class.java.simpleName)
+    private val TAG = FindStationDialog::class.java.simpleName
 
 
     /* Main class variables */

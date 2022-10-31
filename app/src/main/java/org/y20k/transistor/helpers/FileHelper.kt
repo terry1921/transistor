@@ -21,6 +21,7 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.google.gson.Gson
@@ -49,7 +50,7 @@ import kotlin.math.pow
 object FileHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(FileHelper::class.java)
+    private val TAG: String = FileHelper::class.java.simpleName
 
 
     /* Return an InputStream for given Uri */
@@ -111,7 +112,7 @@ object FileHelper {
 
     /* Determine content type based on file extension */
     fun getContentTypeFromExtension(fileName: String): String {
-        LogHelper.i(TAG, "Deducing content type from file name: $fileName")
+        Log.i(TAG, "Deducing content type from file name: $fileName")
         if (fileName.endsWith("m3u", true)) return Keys.MIME_TYPE_M3U
         if (fileName.endsWith("pls", true)) return Keys.MIME_TYPE_PLS
         if (fileName.endsWith("png", true)) return Keys.MIME_TYPE_PNG
@@ -184,7 +185,7 @@ object FileHelper {
 
     /* Saves collection of radio stations as JSON text file */
     fun saveCollection(context: Context, collection: Collection, lastSave: Date) {
-        LogHelper.v(TAG, "Saving collection - Thread: ${Thread.currentThread().name}")
+        Log.v(TAG, "Saving collection - Thread: ${Thread.currentThread().name}")
         val collectionSize: Int = collection.stations.size
         // do not override an existing collection with an empty one - except when last station is deleted
         if (collectionSize > 0 || PreferencesHelper.loadCollectionSize() == 1) {
@@ -203,10 +204,10 @@ object FileHelper {
                 PreferencesHelper.saveCollectionModificationDate(lastSave)
                 PreferencesHelper.saveCollectionSize(collectionSize)
             } else {
-                LogHelper.w(TAG, "Not writing collection file. Reason: JSON string was completely empty.")
+                Log.w(TAG, "Not writing collection file. Reason: JSON string was completely empty.")
             }
         } else {
-            LogHelper.w(TAG, "Not saving collection. Reason: Trying to override an collection with more than one station")
+            Log.w(TAG, "Not saving collection. Reason: Trying to override an collection with more than one station")
         }
     }
 
@@ -250,16 +251,16 @@ object FileHelper {
 
     /* Reads collection of radio stations from storage using GSON */
     fun readCollection(context: Context): Collection {
-        LogHelper.v(TAG, "Reading collection - Thread: ${Thread.currentThread().name}")
+        Log.v(TAG, "Reading collection - Thread: ${Thread.currentThread().name}")
         // get JSON from text file
         val json: String = readTextFile(context, Keys.FOLDER_COLLECTION, Keys.COLLECTION_FILE)
         var collection: Collection = Collection()
-        when (json.isNotBlank()) {
+        if (json.isNotBlank()) {
             // convert JSON and return as collection
-            true -> try {
+            try {
                 collection = getCustomGson().fromJson(json, collection::class.java)
             } catch (e: Exception) {
-                LogHelper.e(TAG, "Error Reading collection.\nContent: $json")
+                Log.e(TAG, "Error Reading collection.\nContent: $json")
                 e.printStackTrace()
             }
         }
@@ -286,7 +287,7 @@ object FileHelper {
     /* Checks if enough ( = more than 512mb) free space is available */
     fun enoughFreeSpaceAvailable(context: Context): Boolean {
         val usableSpace: Long = context.getExternalFilesDir(Keys.FOLDER_COLLECTION)?.usableSpace ?: 0L
-        LogHelper.e(TAG, "usableSpace: $usableSpace")
+        Log.e(TAG, "usableSpace: $usableSpace")
         return usableSpace > 512000000L
     }
 
@@ -330,7 +331,7 @@ object FileHelper {
     /* Suspend function: Exports collection of stations as M3U file - local backup copy */
     suspend fun backupCollectionAsM3uSuspended(context: Context, collection: Collection) {
         return suspendCoroutine { cont ->
-            LogHelper.v(TAG, "Backing up collection as M3U - Thread: ${Thread.currentThread().name}")
+            Log.v(TAG, "Backing up collection as M3U - Thread: ${Thread.currentThread().name}")
             // create M3U string
             val m3uString: String = CollectionHelper.createM3uString(collection)
             // save M3U as text file
@@ -349,7 +350,7 @@ object FileHelper {
                 inputStream.copyTo(outputStream)
             }
         } catch (exception: Exception) {
-            LogHelper.e(TAG, "Unable to copy file.")
+            Log.e(TAG, "Unable to copy file.")
             success = false
             exception.printStackTrace()
         }
@@ -358,7 +359,7 @@ object FileHelper {
                 // use contentResolver to handle files of type content://
                 context.contentResolver.delete(originalFileUri, null, null)
             } catch (e: Exception) {
-                LogHelper.e(TAG, "Unable to delete the original file. Stack trace: $e")
+                Log.e(TAG, "Unable to delete the original file. Stack trace: $e")
             }
         }
         return success
@@ -382,10 +383,10 @@ object FileHelper {
                 val noMediaOutStream: FileOutputStream = FileOutputStream(getNoMediaFile(folder))
                 noMediaOutStream.write(0)
             } else {
-                LogHelper.v(TAG, ".nomedia file exists already in given folder.")
+                Log.v(TAG, ".nomedia file exists already in given folder.")
             }
         } else  {
-            LogHelper.w(TAG, "Unable to create .nomedia file. Given folder is not valid.")
+            Log.w(TAG, "Unable to create .nomedia file. Given folder is not valid.")
         }
     }
 
@@ -395,7 +396,7 @@ object FileHelper {
         if (folder != null && folder.exists() && folder.isDirectory) {
             getNoMediaFile(folder).delete()
         } else  {
-            LogHelper.w(TAG, "Unable to delete .nomedia file. Given folder is not valid.")
+            Log.w(TAG, "Unable to delete .nomedia file. Given folder is not valid.")
         }
     }
 
@@ -452,7 +453,7 @@ object FileHelper {
         if (text.isNotBlank()) {
             File(context.getExternalFilesDir(folder), fileName).writeText(text)
         } else {
-            LogHelper.w(TAG, "Writing text file $fileName failed. Empty text string text was provided.")
+            Log.w(TAG, "Writing text file $fileName failed. Empty text string text was provided.")
         }
     }
 
@@ -464,7 +465,7 @@ object FileHelper {
             val outputStream: OutputStream? = resolver.openOutputStream(destinationUri)
             outputStream?.write(text.toByteArray(Charsets.UTF_8))
         } else {
-            LogHelper.w(TAG, "Writing text file $destinationUri failed. Empty text string text was provided.")
+            Log.w(TAG, "Writing text file $destinationUri failed. Empty text string text was provided.")
         }
     }
 

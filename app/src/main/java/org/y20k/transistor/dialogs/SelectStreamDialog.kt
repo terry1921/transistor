@@ -1,7 +1,6 @@
 package org.y20k.transistor.dialogs
 
 import androidx.appcompat.app.AlertDialog
-import org.y20k.transistor.helpers.LogHelper
 
 
 /*
@@ -10,7 +9,7 @@ import org.y20k.transistor.helpers.LogHelper
 class SelectStreamDialog {
 
     /* Define log tag */
-    private val TAG = LogHelper.makeLogTag(FindStationDialog::class.java.simpleName)
+    private val TAG = FindStationDialog::class.java.simpleName
 
 
     /* Main class variables */

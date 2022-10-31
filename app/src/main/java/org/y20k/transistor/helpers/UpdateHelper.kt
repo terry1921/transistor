@@ -15,6 +15,7 @@
 package org.y20k.transistor.helpers
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -31,7 +32,7 @@ import org.y20k.transistor.search.RadioBrowserSearch
 class UpdateHelper(private val context: Context, private val updateHelperListener: UpdateHelperListener, private var collection: Collection): RadioBrowserSearch.RadioBrowserSearchListener {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(UpdateHelper::class.java)
+    private val TAG: String = UpdateHelper::class.java.simpleName
 
 
     /* Main class variables */
@@ -93,7 +94,7 @@ class UpdateHelper(private val context: Context, private val updateHelperListene
                 // add playlist link to list for later(!) download in onRadioBrowserSearchResults
                 remoteStationLocationsList.add(station.remoteStationLocation)
             } else {
-                LogHelper.w(TAG, "Unable to update station: ${station.name}.")
+                Log.w(TAG, "Unable to update station: ${station.name}.")
             }
         }
         // special case: collection contained only playlist files
@@ -113,7 +114,7 @@ class UpdateHelper(private val context: Context, private val updateHelperListene
             // direct playlist download
             DownloadHelper.downloadPlaylists(context, arrayOf(station.remoteStationLocation))
         } else {
-            LogHelper.w(TAG, "Unable to update station: ${station.name}.")
+            Log.w(TAG, "Unable to update station: ${station.name}.")
         }
     }
 

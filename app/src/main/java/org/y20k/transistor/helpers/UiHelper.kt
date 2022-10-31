@@ -37,7 +37,7 @@ import org.y20k.transistor.R
 object UiHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(UiHelper::class.java)
+    private val TAG: String = UiHelper::class.java.simpleName
 
 
     /* Sets layout margins for given view in DP */

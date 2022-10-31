@@ -26,7 +26,7 @@ import org.y20k.transistor.Keys
 class DownloadWorker(context : Context, params : WorkerParameters): Worker(context, params) {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(DownloadWorker::class.java)
+    private val TAG: String = DownloadWorker::class.java.simpleName
 
 
     /* Overrides doWork */

@@ -14,7 +14,6 @@
 
 package org.y20k.transistor.search
 
-import android.support.v4.media.session.PlaybackStateCompat
 import com.google.gson.annotations.Expose
 import org.y20k.transistor.Keys
 import org.y20k.transistor.core.Station
@@ -48,7 +47,7 @@ data class RadioBrowserResult (@Expose val changeuuid: String,
             remoteImageLocation = favicon,
             remoteStationLocation = url,
             modificationDate = GregorianCalendar.getInstance().time,
-            playbackState = PlaybackStateCompat.STATE_STOPPED,
+            isPlaying = false,
             radioBrowserStationUuid = stationuuid,
             radioBrowserChangeUuid = changeuuid)
 

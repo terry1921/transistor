@@ -31,7 +31,7 @@ import java.util.*
 object ImportHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(ImportHelper::class.java)
+    private val TAG: String = ImportHelper::class.java.simpleName
 
 
     /* Converts older station of type .m3u  */

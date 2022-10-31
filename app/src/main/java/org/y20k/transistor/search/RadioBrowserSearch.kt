@@ -15,6 +15,7 @@
 package org.y20k.transistor.search
 
 import android.content.Context
+import android.util.Log
 import com.android.volley.*
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
@@ -26,7 +27,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.y20k.transistor.BuildConfig
 import org.y20k.transistor.Keys
-import org.y20k.transistor.helpers.LogHelper
 import org.y20k.transistor.helpers.NetworkHelper
 import org.y20k.transistor.helpers.PreferencesHelper
 
@@ -44,7 +44,7 @@ class RadioBrowserSearch(private var radioBrowserSearchListener: RadioBrowserSea
 
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(RadioBrowserSearch::class.java)
+    private val TAG: String = RadioBrowserSearch::class.java.simpleName
 
 
     /* Main class variables */
@@ -62,7 +62,7 @@ class RadioBrowserSearch(private var radioBrowserSearchListener: RadioBrowserSea
 
     /* Searches station(s) on radio-browser.info */
     fun searchStation(context: Context, query: String, searchType: Int) {
-        LogHelper.v(TAG, "Search - Querying $radioBrowserApi for: $query")
+        Log.v(TAG, "Search - Querying $radioBrowserApi for: $query")
 
         // create queue and request
         requestQueue = Volley.newRequestQueue(context)
@@ -94,7 +94,7 @@ class RadioBrowserSearch(private var radioBrowserSearchListener: RadioBrowserSea
             }
             @Throws(VolleyError::class)
             override fun retry(error: VolleyError) {
-                LogHelper.w(TAG, "Error: $error")
+                Log.w(TAG, "Error: $error")
             }
         }
 
@@ -137,7 +137,7 @@ class RadioBrowserSearch(private var radioBrowserSearchListener: RadioBrowserSea
 
     /* Listens for error response from server */
     private val errorListener: Response.ErrorListener = Response.ErrorListener { error ->
-        LogHelper.w(TAG, "Error: $error")
+        Log.w(TAG, "Error: $error")
     }
 
 }

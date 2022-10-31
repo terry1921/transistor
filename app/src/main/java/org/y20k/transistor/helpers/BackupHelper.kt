@@ -17,6 +17,7 @@ package org.y20k.transistor.helpers
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import org.y20k.transistor.R
 import java.io.*
@@ -28,7 +29,7 @@ import java.util.zip.ZipOutputStream
 object BackupHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(BackupHelper::class.java)
+    private val TAG: String = BackupHelper::class.java.simpleName
 
 
     /* Compresses all files in the app's external files directory into destination zip file */
@@ -44,7 +45,7 @@ object BackupHelper {
                 }
             }
         } else {
-            LogHelper.e(TAG, "Unable to access External Storage.")
+            Log.e(TAG, "Unable to access External Storage.")
         }
     }
 
@@ -112,7 +113,7 @@ object BackupHelper {
                     true -> {
                         // create folder if new file is just a file
                         if (!newFile.isDirectory && !newFile.mkdirs()) {
-                            LogHelper.w(TAG,"Failed to create directory $newFile")
+                            Log.w(TAG,"Failed to create directory $newFile")
                         }
                     }
                     // CASE: Files
@@ -120,7 +121,7 @@ object BackupHelper {
                         // create parent directory, if necessary
                         val parent: File? = newFile.parentFile
                         if (parent != null && !parent.isDirectory && !parent.mkdirs()) {
-                            LogHelper.w(TAG, "Failed to create directory $parent")
+                            Log.w(TAG, "Failed to create directory $parent")
                         }
                         // write file content
                         val fileOutputStream: FileOutputStream = FileOutputStream(newFile)
@@ -132,7 +133,7 @@ object BackupHelper {
                     }
                 }
             } catch (e: Exception) {
-                LogHelper.e(TAG, "Unable to safely create get file. $e")
+                Log.e(TAG, "Unable to safely create get file. $e")
             }
             // get next entry - zipEntry will be null, when zipInputStream has no more entries left
             zipEntry = zipInputStream.nextEntry

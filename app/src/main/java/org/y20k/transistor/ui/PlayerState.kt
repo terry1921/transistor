@@ -15,11 +15,8 @@
 package org.y20k.transistor.ui
 
 import android.os.Parcelable
-import android.support.v4.media.session.PlaybackStateCompat
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.annotations.Expose
 import kotlinx.parcelize.Parcelize
-import org.y20k.transistor.Keys
 
 
 /*
@@ -27,6 +24,5 @@ import org.y20k.transistor.Keys
  */
 @Parcelize
 data class PlayerState (@Expose var stationUuid: String = String(),
-                        @Expose var playbackState: Int = PlaybackStateCompat.STATE_STOPPED,
-                        @Expose var bottomSheetState: Int = BottomSheetBehavior.STATE_HIDDEN,
-                        @Expose var sleepTimerState: Int = Keys.STATE_SLEEP_TIMER_STOPPED): Parcelable
+                        @Expose var isPlaying: Boolean = false,
+                        @Expose var sleepTimerRunning: Boolean = false): Parcelable

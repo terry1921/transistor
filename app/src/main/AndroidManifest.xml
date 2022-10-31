@@ -31,14 +31,6 @@
         <meta-data android:name="com.google.android.gms.car.notification.SmallIcon"
             android:resource="@mipmap/ic_launcher" />
 
-        <activity
-            android:name=".PlayerServiceStarterActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="org.y20k.transistor.action.START_PLAYER_SERVICE" />
-            </intent-filter>
-        </activity>
-
         <!-- Main activity for radio station playback on phone -->
         <activity
             android:name=".MainActivity"
@@ -117,11 +109,13 @@
 
         <!-- Player Service -->
         <service
-            android:name=".playback.PlayerService"
+            android:name=".PlayerService"
+            android:foregroundServiceType="mediaPlayback"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService"/>
                 <action android:name="android.media.browse.MediaBrowserService"/>
                 <action android:name="org.y20k.transistor.action.START_PLAYER_SERVICE" />
             </intent-filter>

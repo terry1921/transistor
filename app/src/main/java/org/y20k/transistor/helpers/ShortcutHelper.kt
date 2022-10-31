@@ -23,7 +23,7 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import org.y20k.transistor.Keys
-import org.y20k.transistor.PlayerServiceStarterActivity
+import org.y20k.transistor.MainActivity
 import org.y20k.transistor.R
 import org.y20k.transistor.core.Station
 
@@ -34,7 +34,7 @@ import org.y20k.transistor.core.Station
 object ShortcutHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(ShortcutHelper::class.java)
+    private val TAG: String = ShortcutHelper::class.java.simpleName
 
 
     /* Places shortcut on Home screen */
@@ -75,8 +75,8 @@ object ShortcutHelper {
 
     /* Creates Intent for a station shortcut */
     private fun createShortcutIntent(context: Context, stationUuid: String): Intent {
-        val shortcutIntent = Intent(context, PlayerServiceStarterActivity::class.java)
-        shortcutIntent.action = Keys.ACTION_START_PLAYER_SERVICE
+        val shortcutIntent = Intent(context, MainActivity::class.java)
+        shortcutIntent.action = Keys.ACTION_START
         shortcutIntent.putExtra(Keys.EXTRA_STATION_UUID, stationUuid)
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

@@ -15,8 +15,8 @@
 package org.y20k.transistor
 
 import android.app.Application
+import android.util.Log
 import org.y20k.transistor.helpers.AppThemeHelper
-import org.y20k.transistor.helpers.LogHelper
 import org.y20k.transistor.helpers.PreferencesHelper
 import org.y20k.transistor.helpers.PreferencesHelper.initPreferences
 
@@ -27,13 +27,13 @@ import org.y20k.transistor.helpers.PreferencesHelper.initPreferences
 class Transistor: Application () {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(Transistor::class.java)
+    private val TAG: String = Transistor::class.java.simpleName
 
 
     /* Implements onCreate */
     override fun onCreate() {
         super.onCreate()
-        LogHelper.v(TAG, "Transistor application started.")
+        Log.v(TAG, "Transistor application started.")
         initPreferences()
         // set Dark / Light theme state
         AppThemeHelper.setTheme(PreferencesHelper.loadThemeSelection())
@@ -43,7 +43,7 @@ class Transistor: Application () {
     /* Implements onTerminate */
     override fun onTerminate() {
         super.onTerminate()
-        LogHelper.v(TAG, "Transistor application terminated.")
+        Log.v(TAG, "Transistor application terminated.")
     }
 
 }

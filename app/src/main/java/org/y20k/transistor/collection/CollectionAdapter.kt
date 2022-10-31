@@ -16,7 +16,6 @@ package org.y20k.transistor.collection
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.v4.media.session.PlaybackStateCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -55,12 +54,11 @@ import java.util.*
 class CollectionAdapter(private val context: Context, private val collectionAdapterListener: CollectionAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), UpdateHelper.UpdateHelperListener {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(CollectionAdapter::class.java)
+    private val TAG: String = CollectionAdapter::class.java.simpleName
 
 
     /* Main class variables */
     private lateinit var collectionViewModel: CollectionViewModel
-    // private lateinit var collectionAdapterListener: CollectionAdapterListener
     private var collection: Collection = Collection()
     private var editStationsEnabled: Boolean = PreferencesHelper.loadEditStationsEnabled()
     private var editStationStreamsEnabled: Boolean = PreferencesHelper.loadEditStreamUrisEnabled()
@@ -70,7 +68,7 @@ class CollectionAdapter(private val context: Context, private val collectionAdap
 
     /* Listener Interface */
     interface CollectionAdapterListener {
-        fun onPlayButtonTapped(stationUuid: String, playbackState: Int)
+        fun onPlayButtonTapped(stationUuid: String)
         fun onAddNewButtonTapped()
         fun onChangeImageButtonTapped(stationUuid: String)
     }
@@ -199,26 +197,26 @@ class CollectionAdapter(private val context: Context, private val collectionAdap
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {  }
         })
         stationViewHolder.cancelButton.setOnClickListener {
-            val position: Int = stationViewHolder.bindingAdapterPosition
+            val position: Int = stationViewHolder.adapterPosition
             toggleEditViews(position, station.uuid)
             UiHelper.hideSoftKeyboard(context, stationViewHolder.stationNameEditView)
         }
         stationViewHolder.saveButton.setOnClickListener {
-            val position: Int = stationViewHolder.bindingAdapterPosition
+            val position: Int = stationViewHolder.adapterPosition
             toggleEditViews(position, station.uuid)
             saveStation(station, position, stationViewHolder.stationNameEditView.text.toString(), stationViewHolder.stationUriEditView.text.toString())
             UiHelper.hideSoftKeyboard(context, stationViewHolder.stationNameEditView)
         }
         stationViewHolder.placeOnHomeScreenButton.setOnClickListener {
-            val position: Int = stationViewHolder.bindingAdapterPosition
+            val position: Int = stationViewHolder.adapterPosition
             ShortcutHelper.placeShortcut(context, station)
             toggleEditViews(position, station.uuid)
             UiHelper.hideSoftKeyboard(context, stationViewHolder.stationNameEditView)
         }
         stationViewHolder.stationImageChangeView.setOnClickListener {
-            val position: Int = stationViewHolder.bindingAdapterPosition
+            val position: Int = stationViewHolder.adapterPosition
             collectionAdapterListener.onChangeImageButtonTapped(station.uuid)
-            stationViewHolder.absoluteAdapterPosition
+            stationViewHolder.adapterPosition
             toggleEditViews(position, station.uuid)
             UiHelper.hideSoftKeyboard(context, stationViewHolder.stationNameEditView)
         }
@@ -277,17 +275,16 @@ class CollectionAdapter(private val context: Context, private val collectionAdap
 
     /* Sets up a station's play and edit buttons */
     private fun setStationButtons(stationViewHolder: StationViewHolder, station: Station) {
-        val playbackState: Int = station.playbackState
-        when (playbackState) {
-            PlaybackStateCompat.STATE_PLAYING -> stationViewHolder.playButtonView.setImageResource(R.drawable.ic_stop_circle_outline_36dp)
-            else -> stationViewHolder.playButtonView.setImageResource(R.drawable.ic_play_circle_outline_36dp)
+        when (station.isPlaying) {
+            true -> stationViewHolder.playButtonView.setImageResource(R.drawable.ic_stop_circle_outline_36dp)
+            false -> stationViewHolder.playButtonView.setImageResource(R.drawable.ic_play_circle_outline_36dp)
         }
         stationViewHolder.playButtonView.setOnClickListener {
-            collectionAdapterListener.onPlayButtonTapped(station.uuid, playbackState)
+            collectionAdapterListener.onPlayButtonTapped(station.uuid)
         }
         stationViewHolder.stationCardView.setOnLongClickListener {
             if (editStationsEnabled) {
-                val position: Int = stationViewHolder.bindingAdapterPosition
+                val position: Int = stationViewHolder.adapterPosition
                 toggleEditViews(position, station.uuid)
                 return@setOnLongClickListener true
             } else {
@@ -452,7 +449,7 @@ class CollectionAdapter(private val context: Context, private val collectionAdap
 //            // download playlist // todo check content type detection is necessary here
 //            DownloadHelper.downloadPlaylists(context, arrayOf(station.remoteStationLocation))
 //        } else {
-//            LogHelper.w(TAG, "Unable to update station: ${station.name}.")
+//            Log.w(TAG, "Unable to update station: ${station.name}.")
 //        }
 //    }
 
@@ -567,7 +564,7 @@ class CollectionAdapter(private val context: Context, private val collectionAdap
             val newStation: Station = newCollection.stations[newItemPosition]
 
             // compare relevant contents of a station
-            if (oldStation.playbackState != newStation.playbackState) return false
+            if (oldStation.isPlaying != newStation.isPlaying) return false
             if (oldStation.uuid != newStation.uuid) return false
             if (oldStation.starred != newStation.starred) return false
             if (oldStation.name != newStation.name) return false

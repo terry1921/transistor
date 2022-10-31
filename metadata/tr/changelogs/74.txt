@@ -5,4 +5,4 @@
 - yayın URL'lerinin içe aktarılmasıyla ilgili bir hata düzeltildi (istasyonu güncellemeniz gerekebilir)
 - Android Auto için üst veri görüntülemeyi geri getirir
 
-v4 güncellemesi oldukça büyüktü, daha fazlasını öğrenin: https://github.com/y20k/transistor/blob/master/metadata/en-US/changelogs/72.txt
+v4 güncellemesi oldukça büyüktü, daha fazlasını öğrenin: https://codeberg.org/y20k/transistor/src/branch/master/metadata/en-US/changelogs/72.txt

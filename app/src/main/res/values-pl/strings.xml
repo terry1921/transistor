@@ -143,7 +143,7 @@
     <string name="notification_now_playing_channel_description">Sterowanie odtwarzaniem, nazwa stacji i obraz.</string>
     <string name="notification_now_playing_channel_name">Sterowanie odtwarzaniem</string>
     <string name="station_list_button_add_new_station">Dodaj nową stację</string>
-    <string name="toastmessage_updating_station">Aktualizacja stacji.</string>
+    <string name="toastmessage_updating_station">Aktualizowanie stacji…</string>
     <string name="toastmessage_updating_collection">Aktualizacja kolekcji stacji.</string>
     <string name="toastmessage_station_not_valid">Stacja jest nieprawidłowa.</string>
     <string name="toastmessage_station_duplicate">Zduplikowana stacja.</string>
@@ -183,7 +183,7 @@
     <string name="dialog_edit_place_on_home_screen">Umieść na Ekranie głównym</string>
     <string name="dialog_edit_choose_station_image">Wybierz</string>
     <string name="fragment_settings_title">Ustawienia</string>
-    <string name="onboarding_app_import_running">Importowanie swoich stacji. Proszę czekać.</string>
+    <string name="onboarding_app_import_running">Importowanie swoich stacji…</string>
     <string name="toastmessage_updating_station_images">Aktualizowanie obrazów stacji.</string>
     <string name="toastmessage_error_restart_playback_failed">Nie można ponownie uruchomić odtwarzania.</string>
     <string name="toastmessage_error_download_error">Błąd pobierania</string>
@@ -197,32 +197,32 @@
     <string name="pref_app_version_title">Wersja aplikacji</string>
     <string name="pref_app_version_summary">Wersja</string>
     <string name="pref_about_title">O programie</string>
-    <string name="toastmessage_install_file_helper"></string>
-    <string name="station_list_button_settings"></string>
-    <string name="pref_advanced_title"></string>
-    <string name="pref_edit_station_title"></string>
-    <string name="descr_card_station_image_change"></string>
-    <string name="onboarding_app_rodriguez_quote_2" translatable="false"></string>
-    <string name="toastmessage_restoring_collection"></string>
-    <string name="pref_backup_title"></string>
-    <string name="pref_restore_title"></string>
-    <string name="toastmessage_collection_backup"></string>
-    <string name="dialog_edit_station_name"></string>
-    <string name="dialog_edit_save_changes"></string>
-    <string name="sample_text_station_name" translatable="false"></string>
-    <string name="pref_edit_station_stream_summary_disabled"></string>
-    <string name="player_sheet_p_no_data" translatable="false"></string>
-    <string name="app_version_name" translatable="false"></string>
-    <string name="pref_edit_station_stream_title"></string>
-    <string name="pref_edit_station_stream_summary_enabled"></string>
-    <string name="sample_text_steam_url" translatable="false"></string>
-    <string name="sample_text_sleep_timer_remaining_time" translatable="false"></string>
-    <string name="pref_edit_station_summary_enabled"></string>
-    <string name="pref_edit_station_summary_disabled"></string>
-    <string name="toastmessage_save_m3u"></string>
-    <string name="pref_restore_summary"></string>
-    <string name="onboarding_app_rodriguez_quote_1" translatable="false"></string>
-    <string name="sample_text_station_metadata" translatable="false"></string>
-    <string name="dialog_edit_stream_uri"></string>
-    <string name="pref_backup_summary"></string>
+    <string name="toastmessage_install_file_helper">Proszę zainstalować menedżera plików.</string>
+    <string name="station_list_button_settings">Ustawienia</string>
+    <string name="pref_advanced_title">Zaawansowane</string>
+    <string name="pref_edit_station_title">Edycja stacji</string>
+    <string name="descr_card_station_image_change">Zmień obrazek stacji</string>
+    <string name="onboarding_app_rodriguez_quote_2" translatable="false"/>
+    <string name="toastmessage_restoring_collection">Przywracanie stacji radiowych z kopii zapasowej.</string>
+    <string name="pref_backup_title">Kopie Zapasowe Stacji</string>
+    <string name="pref_restore_title">Przywracanie Stacji</string>
+    <string name="toastmessage_collection_backup">Tworzenie kopii zapasowej stacji radiowych na:</string>
+    <string name="dialog_edit_station_name">Nazwa stacji</string>
+    <string name="dialog_edit_save_changes">Zapisz Zmiany</string>
+    <string name="sample_text_station_name" translatable="false"/>
+    <string name="pref_edit_station_stream_summary_disabled">Edycja informacji o łączach do strumieni jest wyłączona.</string>
+    <string name="player_sheet_p_no_data" translatable="false"/>
+    <string name="app_version_name" translatable="false"/>
+    <string name="pref_edit_station_stream_title">Edycja Łącz do Strumieni</string>
+    <string name="pref_edit_station_stream_summary_enabled">Edycja informacji o łączach do strumieni jest włączona. Upewnij się, że wprowadzany adres strumienia jest prawidłowy.</string>
+    <string name="sample_text_steam_url" translatable="false"/>
+    <string name="sample_text_sleep_timer_remaining_time" translatable="false"/>
+    <string name="pref_edit_station_summary_enabled">Edycja informacji o stacji jest włączona. Naciśnij i przytrzymaj by wejść w tryb edycji.</string>
+    <string name="pref_edit_station_summary_disabled">Edycja informacji o stacji jest wyłączona.</string>
+    <string name="toastmessage_save_m3u">Zapisywanie stacji radiowych jako M3U…</string>
+    <string name="pref_restore_summary">Przywraca zestaw stacji z kopii zapasowej. Istniejące stacje będą nadpisane.</string>
+    <string name="onboarding_app_rodriguez_quote_1" translatable="false"/>
+    <string name="sample_text_station_metadata" translatable="false"/>
+    <string name="dialog_edit_stream_uri">Adres strumienia</string>
+    <string name="pref_backup_summary">Zapisuje zestaw stacji radiowych, wraz z ich obrazami do pamięci urządzenia.</string>
 </resources>

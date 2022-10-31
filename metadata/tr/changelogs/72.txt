@@ -9,4 +9,4 @@
 -- bir radyo istasyonunu sık kullanılan olarak işaretleyebilirsiniz
 -- ayrı bir Ayarlar ekranı
 
-Daha fazlasını öğrenin: https://github.com/y20k/transistor/issues/251
+Daha fazlasını öğrenin: https://codeberg.org/y20k/transistor/issues/251

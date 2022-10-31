@@ -33,7 +33,7 @@ import java.io.InputStream
 object ImageHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(ImageHelper::class.java)
+    private val TAG: String = ImageHelper::class.java.simpleName
 
     /* Get scaling factor from display density */
     fun getDensityScalingFactor(context: Context): Float {
@@ -81,7 +81,7 @@ object ImageHelper {
 
 
     /* Creates station image on a square background with the main station image color and option padding for adaptive icons */
-    fun createSquareImage(context: Context, bitmap: Bitmap, backgroundColor: Int, size: Int, adaptivePadding: Boolean): Bitmap? {
+    fun createSquareImage(context: Context, bitmap: Bitmap, backgroundColor: Int, size: Int, adaptivePadding: Boolean): Bitmap {
 
         // create background
         val background = Paint()
@@ -93,8 +93,8 @@ object ImageHelper {
         }
 
         // create empty bitmap and canvas
-        val outputImage = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        val imageCanvas = Canvas(outputImage)
+        val outputImage: Bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val imageCanvas: Canvas = Canvas(outputImage)
 
         // draw square background
         val right = size.toFloat()

@@ -16,16 +16,13 @@ package org.y20k.transistor.helpers
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Bundle
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaDescriptionCompat
-import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -45,7 +42,7 @@ import java.util.*
 object CollectionHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(CollectionHelper::class.java)
+    private val TAG: String = CollectionHelper::class.java.simpleName
 
 
     /* Checks if station is already in collection */
@@ -260,30 +257,30 @@ object CollectionHelper {
     }
 
 
-    /* Gets next station within collection */
-    fun getNextStation(collection: Collection, stationUuid: String): Station {
+    /* Gets MediaIem for next station within collection */
+    fun getNextMediaItem(collection: Collection, stationUuid: String): MediaItem {
         val currentStationPosition: Int = getStationPosition(collection, stationUuid)
-        LogHelper.d(TAG, "Number of stations: ${collection.stations.size} | current position: $currentStationPosition") // todo remove
+        Log.d(TAG, "Number of stations: ${collection.stations.size} | current position: $currentStationPosition") // todo remove
         if (collection.stations.isEmpty() || currentStationPosition == -1) {
-            return Station()
+            return buildMediaItem(Station())
         } else if (currentStationPosition < collection.stations.size -1) {
-            return collection.stations[currentStationPosition + 1]
+            return buildMediaItem(collection.stations[currentStationPosition + 1])
         } else {
-            return collection.stations.first()
+            return buildMediaItem(collection.stations.first())
         }
     }
 
 
-    /* Gets previous station within collection */
-    fun getPreviousStation(collection: Collection, stationUuid: String): Station {
+    /* Gets MediaIem for previous station within collection */
+    fun getPreviousMediaItem(collection: Collection, stationUuid: String): MediaItem {
         val currentStationPosition: Int = getStationPosition(collection, stationUuid)
-        LogHelper.d(TAG, "Number of stations: ${collection.stations.size} | current position: $currentStationPosition") // todo remove
+        Log.d(TAG, "Number of stations: ${collection.stations.size} | current position: $currentStationPosition") // todo remove
         if (collection.stations.isEmpty() || currentStationPosition == -1) {
-            return Station()
+            return buildMediaItem(Station())
         } else if (currentStationPosition > 0) {
-            return collection.stations[currentStationPosition - 1]
+            return buildMediaItem(collection.stations[currentStationPosition - 1])
         } else {
-            return collection.stations.last()
+            return buildMediaItem(collection.stations.last())
         }
     }
 
@@ -321,27 +318,56 @@ object CollectionHelper {
     }
 
 
+    /* TODO */
+    fun getChildren(collection: Collection): List<MediaItem> {
+        val mediaItems: MutableList<MediaItem> = mutableListOf()
+        collection.stations.forEach { station ->
+            mediaItems.add(buildMediaItem(station))
+        }
+        return mediaItems
+    }
+
+
+    /* TODO */
+    fun getItem(collection: Collection, stationUuid: String): MediaItem {
+        return buildMediaItem(getStation(collection, stationUuid))
+    }
+
+
+    /* TODO */
+    fun getRootItem(): MediaItem {
+        val metadata: MediaMetadata = MediaMetadata.Builder()
+            .setTitle("Root Folder")
+            .setIsPlayable(false)
+            .setFolderType(MediaMetadata.FOLDER_TYPE_MIXED)
+            .build()
+        return MediaItem.Builder()
+            .setMediaId("[rootID]")
+            .setMediaMetadata(metadata)
+            .build()
+    }
+
+
+
     /* Saves the playback state of a given station */
-    fun savePlaybackState(context: Context, collection: Collection, station: Station, playbackState: Int): Collection {
+    fun savePlaybackState(context: Context, collection: Collection, stationUuid: String, isPlaying: Boolean): Collection {
         collection.stations.forEach { it ->
             // reset playback state everywhere
-            it.playbackState = PlaybackStateCompat.STATE_STOPPED
+            it.isPlaying = false
             // set given playback state at this station
-            if (it.uuid == station.uuid) {
-                it.playbackState = playbackState
+            if (it.uuid == stationUuid) {
+                it.isPlaying = isPlaying
             }
         }
         // save collection and store modification date
         collection.modificationDate = saveCollection(context, collection)
-        // save playback state of PlayerService
-        PreferencesHelper.savePlayerPlaybackState(playbackState)
         return collection
     }
 
 
     /* Saves collection of radio stations */
-    fun saveCollection (context: Context, collection: Collection, async: Boolean = true): Date {
-        LogHelper.v(TAG, "Saving collection of radio stations to storage. Async = ${async}. Size = ${collection.stations.size}")
+    fun saveCollection(context: Context, collection: Collection, async: Boolean = true): Date {
+        Log.v(TAG, "Saving collection of radio stations to storage. Async = ${async}. Size = ${collection.stations.size}")
         // get modification date
         val date: Date = Calendar.getInstance().time
         collection.modificationDate = date
@@ -369,7 +395,7 @@ object CollectionHelper {
 
     /* Export collection of stations as M3U */
     fun exportCollectionM3u(context: Context, collection: Collection) {
-        LogHelper.v(TAG, "Exporting collection of stations as M3U")
+        Log.v(TAG, "Exporting collection of stations as M3U")
         // export collection as M3U - launch = fire & forget (no return value from save collection)
         if (collection.stations.size > 0) {
             CoroutineScope(IO).launch { FileHelper.backupCollectionAsM3uSuspended(context, collection) }
@@ -406,7 +432,7 @@ object CollectionHelper {
 
     /* Sends a broadcast that the radio station collection has changed */
     fun sendCollectionBroadcast(context: Context, modificationDate: Date) {
-        LogHelper.v(TAG, "Broadcasting that collection has changed.")
+        Log.v(TAG, "Broadcasting that collection has changed.")
         val collectionChangedIntent = Intent()
         collectionChangedIntent.action = Keys.ACTION_COLLECTION_CHANGED
         collectionChangedIntent.putExtra(Keys.EXTRA_COLLECTION_MODIFICATION_DATE, modificationDate.time)
@@ -414,43 +440,68 @@ object CollectionHelper {
     }
 
 
-    /* Creates MediaMetadata for a single station - used in media session*/
-    fun buildStationMediaMetadata(context: Context, station: Station, metadata: String): MediaMetadataCompat {
-        return MediaMetadataCompat.Builder().apply {
-            putString(MediaMetadataCompat.METADATA_KEY_ARTIST, station.name)
-            putString(MediaMetadataCompat.METADATA_KEY_TITLE, metadata)
-            putString(MediaMetadataCompat.METADATA_KEY_ALBUM, context.getString(R.string.app_name))
-            putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, station.getStreamUri())
-            putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, ImageHelper.getScaledStationImage(context, station.image, Keys.SIZE_COVER_LOCK_SCREEN))
-            //putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, station.image)
+//    /* Creates MediaMetadata for a single station - used in media session*/
+//    fun buildStationMediaMetadata(context: Context, station: Station, metadata: String): MediaMetadataCompat {
+//        return MediaMetadataCompat.Builder().apply {
+//            putString(MediaMetadataCompat.METADATA_KEY_ARTIST, station.name)
+//            putString(MediaMetadataCompat.METADATA_KEY_TITLE, metadata)
+//            putString(MediaMetadataCompat.METADATA_KEY_ALBUM, context.getString(R.string.app_name))
+//            putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, station.getStreamUri())
+//            putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, ImageHelper.getScaledStationImage(context, station.image, Keys.SIZE_COVER_LOCK_SCREEN))
+//            //putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, station.image)
+//        }.build()
+//    }
+//
+//
+//    /* Creates MediaItem for a station - used by collection provider */
+//    fun buildStationMediaMetaItem(context: Context, station: Station): MediaBrowserCompat.MediaItem {
+//        val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
+//        mediaDescriptionBuilder.setMediaId(station.uuid)
+//        mediaDescriptionBuilder.setTitle(station.name)
+//        mediaDescriptionBuilder.setIconBitmap(ImageHelper.getScaledStationImage(context, station.image, Keys.SIZE_COVER_LOCK_SCREEN))
+//        // mediaDescriptionBuilder.setIconUri(station.image.toUri())
+//        return MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+//    }
+//
+//
+//    /* Creates description for a station - used in MediaSessionConnector */
+//    fun buildStationMediaDescription(context: Context, station: Station, metadata: String): MediaDescriptionCompat {
+//        val coverBitmap: Bitmap = ImageHelper.getScaledStationImage(context, station.image, Keys.SIZE_COVER_LOCK_SCREEN)
+//        val extras: Bundle = Bundle()
+//        extras.putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, coverBitmap)
+//        extras.putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, coverBitmap)
+//        return MediaDescriptionCompat.Builder().apply {
+//            setMediaId(station.uuid)
+//            setIconBitmap(coverBitmap)
+//            setIconUri(station.image.toUri())
+//            setTitle(metadata)
+//            setSubtitle(station.name)
+//            setExtras(extras)
+//        }.build()
+//    }
+
+
+    /* Creates a MediaItem with MediaMetadata for a single episode - used to prapare player */
+    fun buildMediaItem(station: Station): MediaItem {
+        // todo implement HLS MediaItems
+        // put uri in RequestMetadata - credit: https://stackoverflow.com/a/70103460
+        val requestMetadata = MediaItem.RequestMetadata.Builder().apply {
+            setMediaUri(station.getStreamUri().toUri())
         }.build()
-    }
-
-
-    /* Creates MediaItem for a station - used by collection provider */
-    fun buildStationMediaMetaItem(context: Context, station: Station): MediaBrowserCompat.MediaItem {
-        val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-        mediaDescriptionBuilder.setMediaId(station.uuid)
-        mediaDescriptionBuilder.setTitle(station.name)
-        mediaDescriptionBuilder.setIconBitmap(ImageHelper.getScaledStationImage(context, station.image, Keys.SIZE_COVER_LOCK_SCREEN))
-        // mediaDescriptionBuilder.setIconUri(station.image.toUri())
-        return MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-    }
-
-
-    /* Creates description for a station - used in MediaSessionConnector */
-    fun buildStationMediaDescription(context: Context, station: Station, metadata: String): MediaDescriptionCompat {
-        val coverBitmap: Bitmap = ImageHelper.getScaledStationImage(context, station.image, Keys.SIZE_COVER_LOCK_SCREEN)
-        val extras: Bundle = Bundle()
-        extras.putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, coverBitmap)
-        extras.putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, coverBitmap)
-        return MediaDescriptionCompat.Builder().apply {
+        // build MediaMetadata
+        val mediaMetadata = MediaMetadata.Builder().apply {
+            setArtist(station.name)
+            //setTitle(station.name)
+            setArtworkUri(station.image.toUri())
+            setFolderType(MediaMetadata.FOLDER_TYPE_NONE)
+            setIsPlayable(true)
+        }.build()
+        // build MediaItem and return it
+        return MediaItem.Builder().apply {
             setMediaId(station.uuid)
-            setIconBitmap(coverBitmap)
-            setIconUri(station.image.toUri())
-            setTitle(metadata)
-            setSubtitle(station.name)
-            setExtras(extras)
+            setRequestMetadata(requestMetadata)
+            setMediaMetadata(mediaMetadata)
+            setUri(station.getStreamUri().toUri())
         }.build()
     }
 
@@ -479,7 +530,7 @@ object CollectionHelper {
             }
             faviconAddress = "http://$host/favicon.ico"
         } catch (e: Exception) {
-            LogHelper.e(TAG, "Unable to get base URL from $urlString.\n$e ")
+            Log.e(TAG, "Unable to get base URL from $urlString.\n$e ")
         }
         return faviconAddress
     }

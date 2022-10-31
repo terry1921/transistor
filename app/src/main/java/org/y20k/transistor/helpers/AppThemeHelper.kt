@@ -17,6 +17,7 @@ package org.y20k.transistor.helpers
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import org.y20k.transistor.Keys
@@ -29,7 +30,7 @@ import org.y20k.transistor.R
 object AppThemeHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(AppThemeHelper::class.java)
+    private val TAG: String = AppThemeHelper::class.java.simpleName
 
 
     /* Sets app theme */
@@ -39,27 +40,27 @@ object AppThemeHelper {
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
                     // turn on dark mode
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    LogHelper.i(TAG, "Dark Mode activated.")
+                    Log.i(TAG, "Dark Mode activated.")
                 }
             }
             Keys.STATE_THEME_LIGHT_MODE -> {
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
                     // turn on light mode
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    LogHelper.i(TAG, "Theme: Light Mode activated.")
+                    Log.i(TAG, "Theme: Light Mode activated.")
                 }
             }
             Keys.STATE_THEME_FOLLOW_SYSTEM -> {
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
                     // turn on mode "follow system"
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    LogHelper.i(TAG, "Theme: Follow System Mode activated.")
+                    Log.i(TAG, "Theme: Follow System Mode activated.")
                 }
             }
             else -> {
                 // turn on mode "follow system"
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                LogHelper.i(TAG, "Theme: Follow System Mode activated.")
+                Log.i(TAG, "Theme: Follow System Mode activated.")
             }
         }
     }

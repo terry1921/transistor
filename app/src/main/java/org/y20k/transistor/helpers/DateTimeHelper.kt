@@ -14,6 +14,7 @@
 
 package org.y20k.transistor.helpers
 
+import android.util.Log
 import org.y20k.transistor.Keys
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,7 +26,7 @@ import java.util.*
 object DateTimeHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(DateTimeHelper::class.java)
+    private val TAG: String = DateTimeHelper::class.java.simpleName
 
     /* Main class variables */
     private const val pattern: String = "EEE, dd MMM yyyy HH:mm:ss Z"
@@ -39,7 +40,7 @@ object DateTimeHelper {
             // parse date string using standard pattern
             date = dateFormat.parse((dateString)) ?: Keys.DEFAULT_DATE
         } catch (e: Exception) {
-            LogHelper.w(TAG, "Unable to parse. Trying an alternative Date format. $e")
+            Log.w(TAG, "Unable to parse. Trying an alternative Date format. $e")
             // try alternative parsing patterns
             date = tryAlternativeRfc2822Parsing(dateString)
         }
@@ -76,11 +77,11 @@ object DateTimeHelper {
             date = SimpleDateFormat("EEE, dd MMM yyyy HH:mm Z", Locale.ENGLISH).parse((dateString)) ?: Keys.DEFAULT_DATE
         } catch (e: Exception) {
             try {
-                LogHelper.w(TAG, "Unable to parse. Trying an alternative Date format. $e")
+                Log.w(TAG, "Unable to parse. Trying an alternative Date format. $e")
                 // try to parse without time zone
                 date = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse((dateString)) ?: Keys.DEFAULT_DATE
             } catch (e: Exception) {
-                LogHelper.e(TAG, "Unable to parse. Returning a default date. $e")
+                Log.e(TAG, "Unable to parse. Returning a default date. $e")
             }
         }
         return date

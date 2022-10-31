@@ -27,7 +27,7 @@ class DownloadFinishedReceiver(): BroadcastReceiver() {
 
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(DownloadFinishedReceiver::class.java)
+    private val TAG: String = DownloadFinishedReceiver::class.java.simpleName
 
 
     /* Overrides onReceive */

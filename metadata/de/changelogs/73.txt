@@ -7,4 +7,4 @@
 -- verbesserte HLS-Unterstützung
 -- Sortierung ist unabhängig von Groß- und Kleinschreibung
 
-Das v4-Update war ziemlich umfangreich, erfahre mehr unter: https://github.com/y20k/transistor/blob/master/metadata/en-US/changelogs/72.txt
+Das v4-Update war ziemlich umfangreich, erfahre mehr unter: https://codeberg.org/y20k/transistor/src/branch/master/metadata/en-US/changelogs/72.txt

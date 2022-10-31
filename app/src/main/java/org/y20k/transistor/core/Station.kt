@@ -15,7 +15,6 @@
 package org.y20k.transistor.core
 
 import android.os.Parcelable
-import android.support.v4.media.session.PlaybackStateCompat
 import androidx.annotation.Keep
 import com.google.gson.annotations.Expose
 import kotlinx.parcelize.Parcelize
@@ -43,7 +42,7 @@ data class Station (@Expose val uuid: String = UUID.randomUUID().toString(),
                     @Expose var remoteImageLocation: String = String(),
                     @Expose var remoteStationLocation: String = String(),
                     @Expose var modificationDate: Date = Keys.DEFAULT_DATE,
-                    @Expose var playbackState: Int = PlaybackStateCompat.STATE_STOPPED,
+                    @Expose var isPlaying: Boolean = false,
                     @Expose var radioBrowserStationUuid: String = String(),
                     @Expose var radioBrowserChangeUuid: String = String()): Parcelable {
 
@@ -91,7 +90,7 @@ data class Station (@Expose val uuid: String = UUID.randomUUID().toString(),
                        remoteImageLocation = remoteImageLocation,
                        remoteStationLocation = remoteStationLocation,
                        modificationDate = modificationDate,
-                       playbackState = playbackState,
+                       isPlaying = isPlaying,
                        radioBrowserStationUuid = radioBrowserStationUuid,
                        radioBrowserChangeUuid = radioBrowserChangeUuid)
     }

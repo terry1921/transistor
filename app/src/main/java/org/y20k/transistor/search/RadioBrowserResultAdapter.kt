@@ -20,7 +20,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
 import org.y20k.transistor.R
-import org.y20k.transistor.helpers.LogHelper
 
 
 /*
@@ -29,7 +28,7 @@ import org.y20k.transistor.helpers.LogHelper
 class RadioBrowserResultAdapter(private val listener: RadioBrowserResultAdapterListener, var searchResults: Array<RadioBrowserResult>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(RadioBrowserResultAdapter::class.java)
+    private val TAG: String = RadioBrowserResultAdapter::class.java.simpleName
 
 
     /* Main class variables */

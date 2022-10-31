@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -44,7 +45,7 @@ import org.y20k.transistor.helpers.*
 class SettingsFragment: PreferenceFragmentCompat(), YesNoDialog.YesNoDialogListener {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(SettingsFragment::class.java)
+    private val TAG: String = SettingsFragment::class.java.simpleName
 
 
     /* Overrides onViewCreated from PreferenceFragmentCompat */
@@ -198,7 +199,7 @@ class SettingsFragment: PreferenceFragmentCompat(), YesNoDialog.YesNoDialogListe
             // open web browser
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
-                data = "https://github.com/y20k/transistor/issues".toUri()
+                data = "https://codeberg.org/y20k/transistor/issues".toUri()
             }
             startActivity(intent)
             return@setOnPreferenceClickListener true
@@ -300,7 +301,7 @@ class SettingsFragment: PreferenceFragmentCompat(), YesNoDialog.YesNoDialogListe
                 }
                 Toast.makeText(activity as Context, R.string.toastmessage_save_m3u, Toast.LENGTH_LONG).show()
             } else {
-                LogHelper.w(TAG, "M3U export failed.")
+                Log.w(TAG, "M3U export failed.")
             }
         }
     }
@@ -314,7 +315,7 @@ class SettingsFragment: PreferenceFragmentCompat(), YesNoDialog.YesNoDialogListe
             if (targetUri != null) {
                 BackupHelper.backup(activity as Context, targetUri)
             } else {
-                LogHelper.w(TAG, "Station backup failed.")
+                Log.w(TAG, "Station backup failed.")
             }
         }
     }
@@ -375,7 +376,7 @@ class SettingsFragment: PreferenceFragmentCompat(), YesNoDialog.YesNoDialogListe
         try {
             requestSaveM3uLauncher.launch(intent)
         } catch (exception: Exception) {
-            LogHelper.e(TAG, "Unable to save M3U.\n$exception")
+            Log.e(TAG, "Unable to save M3U.\n$exception")
             Toast.makeText(activity as Context, R.string.toastmessage_install_file_helper, Toast.LENGTH_LONG).show()
         }
     }
@@ -394,7 +395,7 @@ class SettingsFragment: PreferenceFragmentCompat(), YesNoDialog.YesNoDialogListe
         try {
             requestBackupCollectionLauncher.launch(intent)
         } catch (exception: Exception) {
-            LogHelper.e(TAG, "Unable to save M3U.\n$exception")
+            Log.e(TAG, "Unable to save M3U.\n$exception")
             Toast.makeText(activity as Context, R.string.toastmessage_install_file_helper, Toast.LENGTH_LONG).show()
         }
     }
@@ -413,7 +414,7 @@ class SettingsFragment: PreferenceFragmentCompat(), YesNoDialog.YesNoDialogListe
         try {
             requestRestoreCollectionLauncher.launch(intent)
         } catch (exception: Exception) {
-            LogHelper.e(TAG, "Unable to open file picker for ZIP.\n$exception")
+            Log.e(TAG, "Unable to open file picker for ZIP.\n$exception")
             // Toast.makeText(activity as Context, R.string.toast_message_install_file_helper, Toast.LENGTH_LONG).show()
         }
     }

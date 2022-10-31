@@ -9,4 +9,4 @@
 -- du kannst einen Radiosender als Favorit markieren
 -- eine eigene Einstellungsseite
 
-Erfahre mehr unter: https://github.com/y20k/transistor/issues/251
+Erfahre mehr unter: https://codeberg.org/y20k/transistor/issues/251

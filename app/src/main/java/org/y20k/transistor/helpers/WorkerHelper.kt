@@ -14,6 +14,7 @@
 
 package org.y20k.transistor.helpers
 
+import android.util.Log
 import androidx.work.*
 import org.y20k.transistor.Keys
 import java.util.*
@@ -26,12 +27,12 @@ import java.util.concurrent.TimeUnit
 object WorkerHelper {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(WorkerHelper::class.java)
+    private val TAG: String = WorkerHelper::class.java.simpleName
 
 
     /* Schedules a DownloadWorker that triggers background updates of the collection periodically */
     fun schedulePeriodicUpdateWorker(): UUID {
-        LogHelper.v(TAG, "Starting / Updating periodic work: update collection")
+        Log.v(TAG, "Starting / Updating periodic work: update collection")
         val requestData: Data = Data.Builder()
                 .putInt(Keys.KEY_DOWNLOAD_WORK_REQUEST, Keys.REQUEST_UPDATE_COLLECTION)
                 .build()

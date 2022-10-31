@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -27,7 +28,6 @@ import kotlinx.coroutines.launch
 import org.y20k.transistor.Keys
 import org.y20k.transistor.core.Collection
 import org.y20k.transistor.helpers.FileHelper
-import org.y20k.transistor.helpers.LogHelper
 import java.util.*
 
 
@@ -37,7 +37,7 @@ import java.util.*
 class CollectionViewModel(application: Application) : AndroidViewModel(application) {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(CollectionViewModel::class.java)
+    private val TAG: String = CollectionViewModel::class.java.simpleName
 
 
     /* Main class variables */
@@ -50,7 +50,7 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
     /* Init constructor */
     init {
         // load collection
-        loadCollection(application)
+        loadCollection()
         // create and register collection changed receiver
         collectionChangedReceiver = createCollectionChangedReceiver()
         LocalBroadcastManager.getInstance(application).registerReceiver(collectionChangedReceiver, IntentFilter(Keys.ACTION_COLLECTION_CHANGED))
@@ -72,8 +72,8 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
                     val date: Date = Date(intent.getLongExtra(Keys.EXTRA_COLLECTION_MODIFICATION_DATE, 0L))
                     // check if reload is necessary
                     if (date.after(modificationDateViewModel)) {
-                        LogHelper.v(TAG, "CollectionViewModel - reload collection after broadcast received.")
-                        loadCollection(context)
+                        Log.v(TAG, "CollectionViewModel - reload collection after broadcast received.")
+                        loadCollection()
                     }
                 }
             }
@@ -82,8 +82,8 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
 
     /* Reads collection of radio stations from storage using GSON */
-    private fun loadCollection(context: Context) {
-        LogHelper.v(TAG, "Loading collection of stations from storage")
+    private fun loadCollection() {
+        Log.v(TAG, "Loading collection of stations from storage")
         viewModelScope.launch {
             // load collection on background thread
             val collection: Collection = FileHelper.readCollectionSuspended(getApplication())

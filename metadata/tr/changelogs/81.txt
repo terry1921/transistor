@@ -2,4 +2,4 @@
 
 **1 Ocak 2021**
 
-- İstasyonları Güncelle özelliğindeki, Transistörü yalnızca tek istasyonun oynatılabilir olduğu garip bir durumda bırakabilecek bir hata düzeltildi (ayrıca bkz: https://github.com/y20k/transistor/issues/291)
+- İstasyonları Güncelle özelliğindeki, Transistörü yalnızca tek istasyonun oynatılabilir olduğu garip bir durumda bırakabilecek bir hata düzeltildi (ayrıca bkz: https://codeberg.org/y20k/transistor/issues/291)

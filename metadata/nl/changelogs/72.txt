@@ -9,4 +9,4 @@
 -- je kunt een radiozender als favoriet markeren
 -- een speciaal scherm voor instellingen
 
-Ontdek meer: https://github.com/y20k/transistor/issues/251
+Ontdek meer: https://codeberg.org/y20k/transistor/issues/251

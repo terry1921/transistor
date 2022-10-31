@@ -24,7 +24,6 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import org.y20k.transistor.helpers.AppThemeHelper
 import org.y20k.transistor.helpers.FileHelper
-import org.y20k.transistor.helpers.LogHelper
 import org.y20k.transistor.helpers.PreferencesHelper
 
 
@@ -34,7 +33,7 @@ import org.y20k.transistor.helpers.PreferencesHelper
 class MainActivity: AppCompatActivity() {
 
     /* Define log tag */
-    private val TAG: String = LogHelper.makeLogTag(MainActivity::class.java)
+    private val TAG: String = MainActivity::class.java.simpleName
 
 
     /* Main class variables */
