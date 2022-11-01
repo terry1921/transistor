@@ -46,6 +46,26 @@ data class Station (@Expose val uuid: String = UUID.randomUUID().toString(),
                     @Expose var radioBrowserStationUuid: String = String(),
                     @Expose var radioBrowserChangeUuid: String = String()): Parcelable {
 
+    fun defaultStation(): Station {
+        val station: Station = Station()
+        station.name = "Radio Panorámica"
+        station.nameManuallySet = true
+        station.homepage = "www.cadenadiez.com.mx"
+        station.starred = false
+        station.streamUris = mutableListOf("http://192.99.16.17:3012/;")
+        station.stream = 0
+        station.streamContent = Keys.MIME_TYPE_UNSUPPORTED
+        station.image = Keys.LOCATION_DEFAULT_STATION_IMAGE
+        station.smallImage = Keys.LOCATION_DEFAULT_STATION_IMAGE
+        station.imageColor = -1
+        station.imageManuallySet = false
+        station.remoteImageLocation = "https://www.mbc.net/.resources/mbclite-theme/webresources/assets/img/apple-touch-icon.png"
+        station.remoteStationLocation = "http://192.99.16.17:3012/;"
+        station.modificationDate = GregorianCalendar.getInstance().time
+        station.isPlaying = false
+
+        return station
+    }
 
     /* overrides toString method */
     override fun toString(): String {

@@ -149,13 +149,13 @@ object CollectionHelper {
     fun addStation(context: Context, collection: Collection, newStation: Station): Collection {
         // check validity
         if (!newStation.isValid()) {
-            Toast.makeText(context, R.string.toastmessage_station_not_valid, Toast.LENGTH_LONG).show()
+            // Toast.makeText(context, R.string.toastmessage_station_not_valid, Toast.LENGTH_LONG).show()
             return collection
         }
         // duplicate check
         else if (!isNewStation(collection, newStation)) {
             // update station
-            Toast.makeText(context, R.string.toastmessage_station_duplicate, Toast.LENGTH_LONG).show()
+            // Toast.makeText(context, R.string.toastmessage_station_duplicate, Toast.LENGTH_LONG).show()
             return collection
         }
         // all clear -> add station
