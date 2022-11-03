@@ -13,7 +13,7 @@ android {
         targetSdkVersion 33
         versionCode 92
         versionName '4.1.2'
-        resConfigs "en", "ar", "ca", "cs", "de", "el", "eo", "es", "eu", "fr", "fy", "gl", "he", "hr", "id", "it", "ja", "kab", "nb-rNO", "nl", "pa", "pl", "pt", "pt-rBR", "ru", "sk", "sl", "sr", "th", "tr", "uk", "zh-rCN"
+        resConfigs "en", "es"
     }
 
     kotlinOptions {
@@ -25,7 +25,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    lintOptions{
+    lintOptions {
         disable 'MissingTranslation'
     }
 
@@ -55,6 +55,24 @@ android {
 //                    'proguard-rules.pro'
         }
 
+    }
+    flavorDimensions "version"
+    productFlavors {
+        panoramica {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // If you are using only one dimension, this property is optional,
+            // and the plugin automatically assigns all the module's flavors to
+            // that dimension.
+            dimension "version"
+            versionCode 1
+            versionName '0.0.1'
+            applicationId 'mx.rockstarlabs.panoramica'
+        }
+        stereobit {
+            dimension "version"
+            versionCode 1
+            applicationId 'mx.rockstarlabs.stereobit'
+        }
     }
 }
 
